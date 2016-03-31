@@ -10,7 +10,7 @@ if __name__ == '__main__':
     print(os.getcwd())
     try:
         import CppHeaderParser
-        mapper = mapper.QtSignalSlotMapper('test_data/')
+        mapper = mapper.QtSignalSlotMapper('../readalo/src/ReadaloX/')
         mapper.run()
         print(mapper.parser)
 

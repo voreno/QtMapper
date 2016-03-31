@@ -30,7 +30,7 @@ class HtmlWriter:
         self._setPageNavigation(page, relpath = '')
 
         numHdr = len(self.mapper.parser.headers)
-        numSrc = len(self.mapper.parser.headers)
+        numSrc = len(self.mapper.parser.sources)
         numFiles = numHdr + numSrc
         numSymbols = str(len(self.mapper.symbols))
 
@@ -539,7 +539,7 @@ class HtmlWriter:
                 table.append(tr)
         for key in symbol.disconnections:
             connector = symbol.disconnections[key]
-            conns = connector.getSymbolConnections(symbol)
+            conns = connector.getSymbolDisconnections(symbol)
             for qtConn in conns:
                 # create links
                 cEmitter = page.classLink(qtConn.emitter.symbol.symbolName, symbol.symbolName, relpath='')
@@ -553,7 +553,7 @@ class HtmlWriter:
                 table.append(tr)
         for key in symbol.otherDisconnections:
             connector = symbol.otherDisconnections[key]
-            conns = connector.getSymbolConnections(symbol)
+            conns = connector.getSymbolDisconnections(symbol)
             for qtConn in conns:
                 # create links
                 cEmitter = page.classLink(qtConn.emitter.symbol.symbolName, symbol.symbolName, relpath='')

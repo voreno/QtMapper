@@ -34,10 +34,22 @@ class Symbol:
         self.callers = {} # QtMethod of this class that calls something
 
     def numConnections(self):
-        return (len(self.connections) + len(self.otherConnections))
+        n = 0
+        for key in self.connections:
+            n += len(self.connections[key].getSymbolConnections(self))
+        for key in self.otherConnections:
+            n += len(self.otherConnections[key].getSymbolConnections(self))
+        #return (len(self.connections) + len(self.otherConnections))
+        return n
 
     def numDisconnections(self):
-        return (len(self.disconnections) + len(self.otherDisconnections))
+        n = 0
+        for key in self.disconnections:
+            n += len(self.disconnections[key].getSymbolDisconnections(self))
+        for key in self.otherDisconnections:
+            n += len(self.otherDisconnections[key].getSymbolDisconnections(self))
+        return n
+        #return (len(self.disconnections) + len(self.otherDisconnections))
 
     def totalConnections(self):
         return (self.numConnections() + self.numDisconnections())
