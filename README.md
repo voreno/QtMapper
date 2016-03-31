@@ -18,7 +18,7 @@ The current version of `QtMapper` requires signals and slots to be marked in the
 
 Further versions may make use of `clang` python bindings to automatically detect all signals, slots and relevant references automatically.
 
-```cplusplus
+```cpp
 //@connect***ClassOfSignal***ClassOfReceiver***ClassMakingConnection::methodMakingConnection(.. args ..)
 this->connect(this->classA, SIGNAL(signalA()), this->classB, SLOT(slotB(int*,bool)));
 
@@ -43,7 +43,7 @@ if __name__ == '__main__':
 	pathToRootOfQtProject = '/Users/xxx/qt/project_x/src/'
 	mapper = mapper.QtSignalSlotMapper(pathToRootOfQtProject)
 	mapper.run()
-	
+
 	pathToOutputHTML = '/Users/xxx/qt/project_x/docs/qtmapped/html/'
 	writer = htmlwriter.HtmlWriter(mapper, pathToOutputHTML)
 	writer.write()
