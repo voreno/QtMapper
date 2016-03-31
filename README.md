@@ -12,6 +12,12 @@ Requires CppHeaderParser
 pip install cppheaderparser
 ```
 
+Requires graphviz for generating graphs
+
+```python
+pip install graphviz
+```
+
 ## Preparing the Qt Project
 
 The current version of `QtMapper` requires signals and slots to be marked in the source code, a bit like Doxygen requires additional markup for descriptions.

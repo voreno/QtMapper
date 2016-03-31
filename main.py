@@ -10,7 +10,9 @@ if __name__ == '__main__':
     print(os.getcwd())
     try:
         import CppHeaderParser
+        import graphviz
         mapper = mapper.QtSignalSlotMapper('../readalo/src/ReadaloX/')
+        #mapper = mapper.QtSignalSlotMapper('test_data/data_small/')
         mapper.run()
         print(mapper.parser)
 
@@ -22,3 +24,5 @@ if __name__ == '__main__':
     except ImportError:
         print('Module CppHeaderParser not found. Please install:')
         print('$ pip install cppheaderparser')
+        print('or Module graphviz not found. Please install:')
+        print('$ pip install graphviz')

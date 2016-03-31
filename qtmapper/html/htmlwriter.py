@@ -4,6 +4,8 @@ from shutil import copyfile
 from qtmapper.html import htmlpage
 from qtmapper.html import htmltable
 
+from qtmapper.html import dotgraph
+
 class HtmlWriter:
     def __init__(self, mapper, writePath):
         self.mapper = mapper # QtSignalMapper
@@ -341,6 +343,17 @@ class HtmlWriter:
 
         page.addContent(page.h(1, signal.method()))
         page.addContent(page.p('Signal Class: ' + page.classLink(signal.symbol.symbolName, '', '../classes/')))
+
+        imgpath = self.rootFolder + '/images/' + signal._key
+        dotgraph.generateSignalMap(signal, '../methods/', imgpath)
+        imgpath += '.svg'
+        with open(imgpath, 'r') as f:
+            html = ''
+            for line in f:
+                html += line + '\n'
+            page.addContent(html)
+        #page.addContent("<object type='image/svg+xml' data='%s'>Your browser does not support SVG</object>" % ('../images/' + signal._key + '.svg'))
+        #page.addContent("<object type='image/svg+xml' data='%s'>Your browser does not support SVG</object>" % ('../images/' + signal._key + '.svg'))
 
         tbl = htmltable.HtmlTable(3, ['Triggers', 'Signal', 'Receivers'])
         trigs = ''
