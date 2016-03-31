@@ -1,0 +1,67 @@
+html {
+  position: relative; }
+
+body {
+  /*margin-bottom: $footerHeight;*/
+  height: 100%;
+  min-height: 100%;
+  /*position: relative;*/ }
+
+html, body {
+  font-family: "Open Sans", sans-serif;
+  font-size: 14px;
+  line-height: 23px;
+  background: #fffcf7; }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Droid Serif", serif; }
+
+hr {
+  margin-top: 3rem;
+  margin-bottom: 2rem;
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 0% 50%, 100% 50%, color-stop(0%, #ffffff), color-stop(50%, #595959), color-stop(100%, #ffffff));
+  background-image: -webkit-linear-gradient(left, #ffffff 0%, #595959 50%, #ffffff 100%);
+  background-image: -webkit-linear-gradient(left, #ffffff 0%, #595959 50%, #ffffff 100%);
+  background-image: linear-gradient(to right, #ffffff 0%, #595959 50%, #ffffff 100%);
+  border: none;
+  height: 1px;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 95%; }
+
+th, td {
+  border-left: 0px;
+  border-top: 0px;
+  border-right: 0px;
+  border-bottom: 1px solid #ddd; }
+
+tr:hover {
+  background-color: #f5f5f5; }
+
+th, td {
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 4px;
+  padding-bottom: 4px; }
+
+a:link {
+  color: #2980b9;
+  background-color: transparent;
+  text-decoration: underline; }
+
+a:visited {
+  color: #2980b9;
+  background-color: transparent;
+  text-decoration: underline; }
+
+a:hover {
+  color: rgba(52, 73, 94, 0.75);
+  background-color: transparent;
+  text-decoration: underline; }
+
+a:active {
+  color: #2980b9;
+  background-color: transparent;
+  text-decoration: underline; }

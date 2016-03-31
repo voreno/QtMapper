@@ -1,0 +1,71 @@
+$background-color: rgba(255, 252, 247, 1.0); // #FFFCF7
+
+$openSans: 'Open Sans', sans-serif;
+$gandhiSerif: 'Gandhi Serif', serif;
+$droidSerif: 'Droid Serif', serif;
+
+$main-font: $openSans;
+$heading-font: $droidSerif;
+
+$link-color: #2c3e50;
+$link-color: rgba(41, 128, 185,1.0);
+$link-color-hover: rgba(52, 73, 94, 0.75);
+
+html {
+    position: relative;
+}
+
+body {
+    /*margin-bottom: $footerHeight;*/
+    height:100%;
+    min-height: 100%;
+    /*position: relative;*/
+}
+
+html, body {
+	font-family: $main-font;
+	font-size: 14px;
+	line-height: 23px;
+	background: $background-color;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: $heading-font;
+}
+
+hr {
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+    background-size: 100%;
+    background-image: -webkit-gradient(linear, 0% 50%, 100% 50%, color-stop(0%, #ffffff), color-stop(50%, #595959), color-stop(100%, #ffffff));
+    background-image: -webkit-linear-gradient(left, #ffffff 0%, #595959 50%, #ffffff 100%);
+    background-image: -webkit-linear-gradient(left, #ffffff 0%, #595959 50%, #ffffff 100%);
+    background-image: linear-gradient(to right, #ffffff 0%, #595959 50%, #ffffff 100%);
+    border: none;
+    height: 1px;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 95%;
+}
+
+th, td {
+    border-left: 0px;
+    border-top: 0px;
+    border-right: 0px;
+    border-bottom: 1px solid #ddd;
+}
+
+tr:hover {background-color: #f5f5f5}
+
+th, td {
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+a:link    {color:$link-color; background-color:transparent; text-decoration:underline}
+a:visited {color:$link-color; background-color:transparent; text-decoration:underline}
+a:hover   {color:$link-color-hover; background-color:transparent; text-decoration:underline}
+a:active  {color:$link-color; background-color:transparent; text-decoration:underline}
