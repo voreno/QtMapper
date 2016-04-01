@@ -25,6 +25,7 @@ class QtSignalSlotMapper:
         self.slots = {}
         self.otherMethods = {}
 
+        self.diagramPaths = []
     def run(self):
         if(self.pathValid == False):
             print('QtSignalSlotMapper error, path does not exist: ' + self.rootPath)

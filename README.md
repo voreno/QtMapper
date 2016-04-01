@@ -18,6 +18,11 @@ Requires graphviz for generating graphs
 pip install graphviz
 ```
 
+## Todos
+
+Improve the graph outputs - there may be some bugs and for some methods that just make connections, we have to show that the graphs make connections.
+
+
 ## Preparing the Qt Project
 
 The current version of `QtMapper` requires signals and slots to be marked in the source code, a bit like Doxygen requires additional markup for descriptions.

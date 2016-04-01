@@ -12,6 +12,9 @@ class HtmlWriter:
 
         self.cssPath = os.path.join(os.path.dirname(__file__), 'css/main.css')
 
+        self.centerDiagrams_diagpage = True #on diagram page
+        self.centerDiagrams_methodpage = False
+
         self.rootFolder = writePath
         self.pathValid = False
         self._checkPath()
@@ -26,6 +29,7 @@ class HtmlWriter:
         self.createSignalPages()
         self.createSlotPages()
         self.createOtherPages()
+        self.createDiagramPage()
 
     def createIndexPage(self):
         page = htmlpage.HtmlPage(self.rootFolder, 'index.html', 'Index', cssRelPath='')
@@ -171,12 +175,46 @@ class HtmlWriter:
         page.addContent(table.html())
         page.write()
 
+    def createDiagramPage(self):
+        page = htmlpage.HtmlPage(self.rootFolder, 'diagrams.html', 'Diagrams', cssRelPath = '')
+        self._setPageNavigation(page, relpath='')
+
+        for diagPath in self.mapper.diagramPaths:
+            with open(diagPath, 'r') as f:
+                html = ''
+                for line in f:
+                    if "xlink:href=\"../" in line:
+                        line = line.replace("xlink:href=\"../", "xlink:href=\"")
+                    html += line + '\n'
+                if(self.centerDiagrams_diagpage):
+                    page.addContent(page._wrap('center',html))
+                else:
+                    page.addContent(html)
+
+            page.addContent('<br><hr>')
+        page.write()
+
+
     def _createOtherPage(self, otherMethod):
         page = htmlpage.HtmlPage(self.rootFolder + 'methods/', otherMethod.htmlName(), otherMethod.method(), cssRelPath='../')
         self._setPageNavigation(page, relpath = '../')
 
         page.addContent(page.h(1, otherMethod.method()))
         page.addContent(page.p('Slot Class: ' + page.classLink(otherMethod.symbol.symbolName, '', '../classes/')))
+
+        # CREATE DOT GRAPH
+        imgpath = self.rootFolder + '/images/' + otherMethod._key
+        dotgraph.generateSignalMap(otherMethod, '../methods/', imgpath)
+        imgpath += '.svg'
+        self.mapper.diagramPaths.append(imgpath)
+        with open(imgpath, 'r') as f:
+            html = ''
+            for line in f:
+                html += line + '\n'
+            if(self.centerDiagrams_methodpage):
+                page.addContent(page._wrap('center',html))
+            else:
+                page.addContent(html)
 
         # *** Calls ***
         if(len(otherMethod.calls)):
@@ -235,9 +273,23 @@ class HtmlWriter:
         page.addContent(page.h(1, slot.method()))
         page.addContent(page.p('Slot Class: ' + page.classLink(slot.symbol.symbolName, '', '../classes/')))
 
-        tbl = htmltable.HtmlTable(3, ['Triggers', 'Slot', 'Receivers'])
-        trigs = ''
-        rcvs = ''
+        # CREATE DOT GRAPH
+        imgpath = self.rootFolder + '/images/' + slot._key
+        dotgraph.generateSignalMap(slot, '../methods/', imgpath)
+        imgpath += '.svg'
+        self.mapper.diagramPaths.append(imgpath)
+        with open(imgpath, 'r') as f:
+            html = ''
+            for line in f:
+                html += line + '\n'
+            if(self.centerDiagrams_methodpage):
+                page.addContent(page._wrap('center',html))
+            else:
+                page.addContent(html)
+
+        #tbl = htmltable.HtmlTable(3, ['Triggers', 'Slot', 'Receivers'])
+        #trigs = ''
+        #rcvs = ''
 
         # *** Trigger ***
         if(len(slot.triggers)):
@@ -248,7 +300,7 @@ class HtmlWriter:
                 tr = [page.classLink(method.symbol.symbolName, slot.symbol.symbolName, '../classes/')]
                 tr.append(page.link(method.htmlName(), method.method(), relpath=''))
                 table.append(tr)
-                trigs += tr[0] + '::' + tr[1] + '<br>'
+                #trigs += tr[0] + '::' + tr[1] + '<br>'
             page.addContent(table.html())
         # *** Connector ***
         if(len(slot.connectors)):
@@ -279,7 +331,7 @@ class HtmlWriter:
                 tr = [page.classLink(method.symbol.symbolName, slot.symbol.symbolName, '../classes/')]
                 tr.append(page.link(method.htmlName(), method.method(), relpath=''))
                 table.append(tr)
-                trigs += tr[0] + '::' + tr[1] + '<br>'
+                #trigs += tr[0] + '::' + tr[1] + '<br>'
             page.addContent(table.html())
         # *** Calls ***
         if(len(slot.calls)):
@@ -290,7 +342,7 @@ class HtmlWriter:
                 tr = [page.classLink(method.symbol.symbolName, slot.symbol.symbolName, '../classes/')]
                 tr.append(page.link(method.htmlName(), method.method(), relpath=''))
                 table.append(tr)
-                rcvs += tr[0] + '::' + tr[1] + '<br>'
+                #rcvs += tr[0] + '::' + tr[1] + '<br>'
             page.addContent(table.html())
         # *** Emits ***
         if(len(slot.emits)):
@@ -301,7 +353,7 @@ class HtmlWriter:
                 tr = [page.classLink(method.symbol.symbolName, slot.symbol.symbolName, '../classes/')]
                 tr.append(page.link(method.htmlName(), method.method(), relpath=''))
                 table.append(tr)
-                rcvs += tr[0] + '::' + tr[1] + '<br>'
+                #rcvs += tr[0] + '::' + tr[1] + '<br>'
             page.addContent(table.html())
         # *** Connections ***
         if(len(slot.connections)):
@@ -332,8 +384,8 @@ class HtmlWriter:
                 table.append(tr)
             page.addContent(table.html())
 
-        tbl.append([trigs, slot.name(), rcvs])
-        page.pageBody.insert(2, tbl.html())
+        #tbl.append([trigs, slot.name(), rcvs])
+        #page.pageBody.insert(2, tbl.html())
 
         page.write()
 
@@ -344,20 +396,25 @@ class HtmlWriter:
         page.addContent(page.h(1, signal.method()))
         page.addContent(page.p('Signal Class: ' + page.classLink(signal.symbol.symbolName, '', '../classes/')))
 
+        # CREATE DOT GRAPH
         imgpath = self.rootFolder + '/images/' + signal._key
         dotgraph.generateSignalMap(signal, '../methods/', imgpath)
         imgpath += '.svg'
+        self.mapper.diagramPaths.append(imgpath)
         with open(imgpath, 'r') as f:
             html = ''
             for line in f:
                 html += line + '\n'
-            page.addContent(html)
+            if(self.centerDiagrams_methodpage):
+                page.addContent(page._wrap('center',html))
+            else:
+                page.addContent(html)
         #page.addContent("<object type='image/svg+xml' data='%s'>Your browser does not support SVG</object>" % ('../images/' + signal._key + '.svg'))
         #page.addContent("<object type='image/svg+xml' data='%s'>Your browser does not support SVG</object>" % ('../images/' + signal._key + '.svg'))
 
-        tbl = htmltable.HtmlTable(3, ['Triggers', 'Signal', 'Receivers'])
-        trigs = ''
-        rcvs = ''
+        #tbl = htmltable.HtmlTable(3, ['Triggers', 'Signal', 'Receivers'])
+        #trigs = ''
+        #rcvs = ''
 
         # *** RECEIVERS ***
         if(len(signal.receivers)):
@@ -368,7 +425,7 @@ class HtmlWriter:
                 tr = [page.classLink(method.symbol.symbolName, signal.symbol.symbolName, '../classes/')]
                 tr.append(page.link(method.htmlName(), method.method(), relpath=''))
                 table.append(tr)
-                rcvs += tr[0] + '::' + tr[1] + '<br>'
+                #rcvs += tr[0] + '::' + tr[1] + '<br>'
             page.addContent(table.html())
         # *** Connector ***
         if(len(signal.connectors)):
@@ -399,7 +456,7 @@ class HtmlWriter:
                 tr = [page.classLink(method.symbol.symbolName, signal.symbol.symbolName, '../classes/')]
                 tr.append(page.link(method.htmlName(), method.method(), relpath=''))
                 table.append(tr)
-                trigs += tr[0] + '::' + tr[1] + '<br>'
+                #trigs += tr[0] + '::' + tr[1] + '<br>'
             page.addContent(table.html())
         # *** Emitters ***
         if(len(signal.emitters)):
@@ -410,11 +467,11 @@ class HtmlWriter:
                 tr = [page.classLink(method.symbol.symbolName, signal.symbol.symbolName, '../classes/')]
                 tr.append(page.link(method.htmlName(), method.method(), relpath=''))
                 table.append(tr)
-                trigs += tr[0] + '::' + tr[1] + '<br>'
+                #trigs += tr[0] + '::' + tr[1] + '<br>'
             page.addContent(table.html())
 
-        tbl.append([trigs, signal.name(), rcvs])
-        page.pageBody.insert(2, tbl.html())
+        #tbl.append([trigs, signal.name(), rcvs])
+        #page.pageBody.insert(2, tbl.html())
 
         page.write()
 
@@ -630,6 +687,7 @@ class HtmlWriter:
         page.addNavLink(os.path.join(relpath, 'signals.html'), 'Signals')
         page.addNavLink(os.path.join(relpath, 'slots.html'), 'Slots')
         page.addNavLink(os.path.join(relpath, 'other.html'), 'Other')
+        page.addNavLink(os.path.join(relpath, 'diagrams.html'), 'Diagrams')
 
     def _checkPath(self):
         if(os.path.isdir(self.rootFolder)):
